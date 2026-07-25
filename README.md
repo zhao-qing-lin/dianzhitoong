@@ -1,5 +1,8 @@
 # 杨瑞 · 店职通（G 盘数据目录）
 
+GitHub：https://github.com/zhao-qing-lin/dianzhitoong  
+当前开发分支：`feat/dianzhitoong-mvp`
+
 全部项目文件在本目录：`G:\庆林\杨瑞`
 
 | 内容 | 路径 |
