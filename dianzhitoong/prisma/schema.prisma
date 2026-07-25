@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  trackId      String   @default("retail-service")
+  createdAt    DateTime @default(now())
+
+  resumes      Resume[]
+  applications Application[]
+  interviews   InterviewSession[]
+}
+
+model Resume {
+  id          String   @id @default(cuid())
+  userId      String
+  title       String
+  targetRole  String
+  contentJson String
+  pdfFileName String?
+  rawText     String?
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+
+  user    User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reviews ResumeReview[]
+}
+
+model ResumeReview {
+  id         String   @id @default(cuid())
+  resumeId   String
+  jdText     String?
+  resultJson String
+  mode       String   @default("ai")
+  createdAt  DateTime @default(now())
+
+  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+}
+
+model Application {
+  id         String   @id @default(cuid())
+  userId     String
+  company    String
+  role       String
+  channel    String   @default("官网/校招")
+  status     String   @default("wishlist")
+  appliedAt  DateTime @default(now())
+  nextAction String?
+  notes      String?
+  updatedAt  DateTime @updatedAt
+  createdAt  DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model InterviewSession {
+  id          String   @id @default(cuid())
+  userId      String
+  roleProfile String
+  round       String   @default("一面")
+  status      String   @default("active")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user     User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages InterviewMessage[]
+  report   InterviewReport?
+}
+
+model InterviewMessage {
+  id        String   @id @default(cuid())
+  sessionId String
+  role      String
+  content   String
+  createdAt DateTime @default(now())
+
+  session InterviewSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+}
+
+model InterviewReport {
+  id         String   @id @default(cuid())
+  sessionId  String   @unique
+  resultJson String
+  mode       String   @default("ai")
+  createdAt  DateTime @default(now())
+
+  session InterviewSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+}

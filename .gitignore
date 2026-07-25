@@ -1,0 +1,23 @@
+# dependencies & build
+**/node_modules/
+**/.next/
+**/out/
+**/dist/
+
+# secrets & local data
+**/.env
+**/.env.local
+**/.env.production
+**/*.db
+**/*.db-journal
+**/uploads/
+**/cookies.txt
+
+# tooling
+**/.DS_Store
+**/next-env.d.ts
+**/.turbo/
+**/.vercel/
+
+# cloudflared / local tools (keep outside repo)
+../tools/
